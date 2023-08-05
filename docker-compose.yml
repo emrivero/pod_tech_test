@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  app:
+    image: node:18.15.0-alpine
+    working_dir: /app
+    command: npm run start:docker
+    entrypoint: /app/entrypoint.sh
+    volumes:
+      - ./:/app/
+    tty: true

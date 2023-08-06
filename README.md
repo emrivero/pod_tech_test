@@ -12,34 +12,32 @@
 - Typescript (5.1.6)
 - Jest (29.6.2)
 - ESlint (8.46.0)
+- Axios (1.4.0)
+- Faker (8.0.2)
 
 ## How to run the project
-1. Clone the repository
+1. Download the repository
 2. Run `docker compose up` to start the tests projects in watch mode
-3. Run `docker compose exec app npm run lint` to run the linter
+3. Run docker compose logs -f app to see the logs
+   
+In addition:   
+1. Run `docker compose exec app npm run lint` to run the linter
+2. Run `docker compose exec app npm run test` to run the tests with coverage
+3. Run `docker compose exec app npm run test:unit` to run unit tests only
+4. Run `docker compose exec app npm run example` to run the example/main.ts file
+5. Run `docker compose exec app <command>` to run any other command inside the container`   
 
-## Project structure
-```
-.
-├── docker-compose.yml
-├── entrypoint.sh
-├── package.json
-├── package-lock.json
-├── README.md
-├── src
-│   ├── index.ts
-│   └── pod.client.ts
-├── test
-│   ├── spec
-│   │   └── pod.client.spec.ts
-│   └── unit
-└── tsconfig.json
-```
-    
-  
-## How to run the project
+> **Note:** This comands not install the dependencies as docker compose up does. If you want to run them, you need to run `docker compose run app npm install` first.
 
 ## Changelog
+### Version 0.2.0
+- Created login method in PODClient class.
+- Created spec test for login method.
+- Furthermore, the following additions and changes are listed:
+  - The first version of the project architecture is implemented. It consists of a domain folder for the business logic and a lib folder for integrations with external dependencies.
+  - Unit tests for the business logic are created.
+  - The code's specification test is divided into separate files.
+  - An `example` folder is added to allow users to use the library and create a sort of playground.
 ### Version 0.1.0
 - Initialized the project using the `npm init` command and installed necessary dependencies.
 - Set up tsconfig.json configuration to use Node.js in conjunction with Typescript.

@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2016",                                                                  
+    "emitDecoratorMetadata": true,
     "esModuleInterop": true,                             
+    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,            
-    "strict": true,                                      
     "skipLibCheck": true,
-    
+    "strict": true,                                      
+    "target": "ES2020",
+    "allowImportingTsExtensions": true,    
+    "module": "CommonJS" /* Specify what module code is generated. */,
   },
   "include": ["./**/*",],
   "exclude": ["app/node_modules"]

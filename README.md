@@ -30,6 +30,13 @@ In addition:
 > **Note:** This comands not install the dependencies as docker compose up does. If you want to run them, you need to run `docker compose run app npm install` first.
 
 ## Changelog
+### Version 0.3.0
+- Created create user method in PODClient class.
+- Created spec test for create user method.
+- Furthermore, the following additions and changes are listed:
+  - Changed the project architecture to DDD Layered Architecture (domain, application, infrastructure)
+  - Refactored the code to use the new architecture
+  - Added new unit tests for the new architecture
 ### Version 0.2.0
 - Created login method in PODClient class.
 - Created spec test for login method.

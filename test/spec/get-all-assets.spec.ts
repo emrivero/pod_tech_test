@@ -1,8 +1,8 @@
-import { PODClient } from "../../src/domain/pod-client";
+import { PODApi } from "../../src/domain/common/interface/pod.api";
 import { createInstance } from "../../src/index";
 
 describe("POD Http client especification", () => {
-  let podClient: PODClient;
+  let podClient: PODApi;
 
   beforeEach(() => {
     podClient = createInstance({

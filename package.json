@@ -1,13 +1,14 @@
 {
   "name": "pod_tech_test",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "POD's Technical Test",
-  "type": "module",
   "scripts": {
     "lint": "eslint src/**/** --ext .ts",
-    "start": "jest test --watch --coverage",
+    "example": "tsc example/main.ts --outDir dist && node dist/example/main.js",
+    "start": "jest test --watch",
     "start:docker": "npm install && npm start",
-    "test": "jest test"
+    "test": "jest test --coverage",
+    "test:unit": "jest test --testRegex=.*\\.test\\.ts$"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,11 @@
     "url": "https://github.com/emrivero/pod_tech_test/issues"
   },
   "homepage": "https://github.com/emrivero/pod_tech_test#readme",
+  "dependencies": {
+    "axios": "^1.4.0"
+  },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@types/jest": "^29.5.3",
     "@types/node": "^18.15.0",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
@@ -49,7 +54,9 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/coverage/"
+      "/coverage/",
+      "/dist/",
+      "/example/"
     ],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"

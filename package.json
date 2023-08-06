@@ -1,6 +1,6 @@
 {
   "name": "pod_tech_test",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "POD's Technical Test",
   "scripts": {
     "lint": "eslint src/**/** --ext .ts",

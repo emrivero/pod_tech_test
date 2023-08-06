@@ -1,19 +1,19 @@
 import { faker } from "@faker-js/faker";
-import { PODClient } from "../../src/domain/pod-client";
+import { PODApi } from "../../src/domain/common/interface/pod.api";
 import { createInstance } from "../../src/index";
-import { CREDENTIALS, FAKE_CREDENTIALS, FAKE_URL, URL } from "./credentials";
+import { CREDENTIALS, FAKE_CREDENTIALS, FAKE_HOST, HOST } from "./credentials";
 
 describe("POD Http client especification", () => {
-  let podClient: PODClient;
+  let podClient: PODApi;
 
   describe("Login method", () => {
     describe("POD Http client login success", () => {
       podClient = createInstance({
         ...CREDENTIALS,
-        host: URL,
+        host: HOST,
       });
 
-      const response = podClient.login();
+      const response = podClient.auth.login();
 
       test("Expect POD Http client to be defined.", () => {
         return expect(podClient).toBeDefined();
@@ -41,12 +41,15 @@ describe("POD Http client especification", () => {
     describe("POD Http client login unauthorized", () => {
       podClient = createInstance({
         ...FAKE_CREDENTIALS,
-        host: URL,
+        host: HOST,
       });
-      const response = podClient.login();
+      const response = podClient.auth.login();
 
       test("response to be defined with empty data", () => {
-        return expect(response).resolves.toHaveProperty("data", {});
+        return expect(response).resolves.toHaveProperty("data", {
+          code: "Unauthorized",
+          message: "Username or password are incorrect.",
+        });
       });
 
       test("response status code to be 401", () => {
@@ -64,12 +67,13 @@ describe("POD Http client especification", () => {
       podClient = createInstance({
         username: faker.string.sample(10),
         password: faker.string.sample(20),
-        host: FAKE_URL,
+        host: FAKE_HOST,
       });
-      const response = podClient.login();
+
+      const response = podClient.auth.login();
 
       test("response to be defined with empty data", () => {
-        return expect(response).resolves.toHaveProperty("data", {});
+        return expect(response).resolves.toHaveProperty("data", undefined);
       });
 
       test("response status code to be 500", () => {

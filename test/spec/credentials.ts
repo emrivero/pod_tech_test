@@ -10,5 +10,6 @@ export const FAKE_CREDENTIALS = {
   password: faker.string.sample(20),
 };
 
-export const URL = "https://hummingbird-staging.podgroup.com";
-export const FAKE_URL = faker.internet.url();
+export const HOST = "https://hummingbird-staging.podgroup.com";
+export const FAKE_HOST = faker.internet.url();
+export const ACCOUNT_ID = "5a1ca1c8-a027-5555-9d2b-3dbb5b32dab7";

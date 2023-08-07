@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { AssetModule } from "../../../src/application/asset/asset.module";
 import { AuthModule } from "../../../src/application/auth/auth.module";
 import { createInstance } from "../../../src/application/create-instance";
 import { PODClient } from "../../../src/application/pod-client";
@@ -24,10 +25,15 @@ describe("createInstance method", () => {
       createUser: jest.fn(),
     };
 
+    const mockAssetModule: AssetModule = {
+      getAll: jest.fn(),
+    };
+
     const mockPODClientInstance = new PODClient(
       mockOptions,
       mockAuthModule,
       mockUserModule,
+      mockAssetModule,
     );
 
     (PODClientFactory.create as jest.Mock).mockReturnValue(

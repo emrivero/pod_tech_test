@@ -1,4 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { PaginateRequest } from "../../../domain/asset/request/paginate.request";
+import { AssetBody } from "../../../domain/asset/types/asset-body";
+import { PaginatePayload } from "../../../domain/asset/types/paginate-payload";
 import { HttpClient } from "../../../domain/common/interface/http.client";
 import { Response } from "../../../domain/common/types/response";
 import { LoginRequest } from "../../../domain/login/request/login.request";
@@ -7,7 +10,7 @@ import { LoginPayload } from "../../../domain/login/types/login-payload";
 import { CreateUserRequest } from "../../../domain/user/request/create-user.request";
 import { UserBody } from "../../../domain/user/types/create-user-body";
 import { CreateUserPayload } from "../../../domain/user/types/create-user-payload";
-import { LOGIN_ROUTE, USERS_ROUTE } from "./routes";
+import { ASSETS_ROUTE, LOGIN_ROUTE, USERS_ROUTE } from "./routes";
 
 /**
  * Axios http client
@@ -47,7 +50,6 @@ export class AxiosHttpClient implements HttpClient {
     user: CreateUserRequest,
     login: LoginRequest,
   ): Promise<Response<UserBody>> {
-    const { username, password, accountId, email, status, permissions } = user;
     const { host } = login;
 
     const url = this.buildUrl(host, USERS_ROUTE);
@@ -67,14 +69,48 @@ export class AxiosHttpClient implements HttpClient {
       const axiosResponse = await axios.post<
         LoginBody,
         AxiosResponse<UserBody>,
-        Omit<CreateUserPayload, "host">
-      >(
-        url,
-        { username, password, accountId, email, status, permissions },
-        {
-          headers,
-        },
-      );
+        CreateUserPayload
+      >(url, user.payload, {
+        headers,
+      });
+
+      return this.buildResponse(axiosResponse);
+    } catch (error) {
+      return this.buildError(error);
+    }
+  }
+
+  /**
+   * Paginate assets
+   * @param {PaginateRequest<T>} paginate
+   * @param {LoginRequest} login
+   * @returns {Promise<Response<AssetBody>>} the assets response
+   */
+  async paginateAssets<T>(
+    paginate: PaginateRequest<T>,
+    login: LoginRequest,
+  ): Promise<Response<AssetBody[]>> {
+    const { host } = login;
+    const { filter, limit, page, accountId } = paginate;
+    const url = this.buildUrl(host, ASSETS_ROUTE);
+
+    try {
+      const loginResponse = await this.login(login);
+
+      if (loginResponse.status !== 200) {
+        return {
+          data: [],
+          status: loginResponse.status,
+          statusText: loginResponse.statusText,
+        };
+      }
+
+      const headers = this.buildHeaders(loginResponse.data.token);
+      const axiosResponse = await axios.get<
+        LoginBody,
+        AxiosResponse<AssetBody[]>,
+        PaginatePayload
+      >(url, { params: { limit, page, accountId, ...filter }, headers });
 
       return this.buildResponse(axiosResponse);
     } catch (error) {

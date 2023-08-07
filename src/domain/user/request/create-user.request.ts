@@ -29,6 +29,17 @@ export class CreateUserRequest {
     );
   }
 
+  get payload(): CreateUserPayload {
+    return {
+      accountId: this.accountId,
+      username: this.username,
+      password: this.password,
+      email: this.email,
+      status: this.status,
+      permissions: this.permissions,
+    };
+  }
+
   /**
    * Get the accountId
    * @returns {string} the accountId

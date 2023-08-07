@@ -1,7 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { createInstance } from "../src/application/create-instance";
 import { ACCOUNT_ID } from "../test/spec/credentials";
-
 const username = process.env.POD_USERNAME || "emilio.martinez";
 const password = process.env.POD_PASSWORD || "zenitram.oilime";
 
@@ -31,7 +30,10 @@ instance.user
   })
   .then((res) => {
     console.log(res);
-  })
-  .catch((err) => {
-    console.error(err);
   });
+
+console.time("getAll");
+instance.asset.getAll(ACCOUNT_ID).then((res) => {
+  console.log(res.data.count);
+  console.timeEnd("getAll"); // 2-3s
+});

@@ -30,6 +30,8 @@ In addition:
 > **Note:** This comands not install the dependencies as docker compose up does. If you want to run them, you need to run `docker compose run app npm install` first.
 
 ## Changelog
+### Version 0.4.1
+- Optimized get all assets method.
 ### Version 0.4.0
 - Created get all assets method in PODClient class.
 - Created spec test for get all assets method.

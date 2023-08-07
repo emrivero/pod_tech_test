@@ -1,6 +1,8 @@
+import { AssetBody } from "../../asset/types/asset-body";
 import { LoginBody } from "../../login/types/login-body";
 import { UserBody } from "../../user/types/create-user-body";
 import { CreateUserPayload } from "../../user/types/create-user-payload";
+import { PaginateResponse } from "../types/paginate-response";
 import { Response } from "../types/response";
 
 /**
@@ -10,6 +12,7 @@ import { Response } from "../types/response";
 export interface PODApi {
   auth: PODAuthApi;
   user: PODUserApi;
+  asset: PODAssetApi;
 }
 
 export interface PODAuthApi {
@@ -27,4 +30,13 @@ export interface PODUserApi {
    * @returns {Promise<Response<UserBody>>} the user response
    */
   create(user: CreateUserPayload): Promise<Response<UserBody>>;
+}
+
+export interface PODAssetApi {
+  /**
+   * Get all assets
+   * @returns {Promise<PaginateResponse<AssetBody>>} the assets response
+   *
+   */
+  getAll(accountId: string): Promise<PaginateResponse<AssetBody>>;
 }

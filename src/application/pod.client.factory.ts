@@ -2,6 +2,8 @@ import { HttpClient } from "../domain/common/interface/http.client";
 import { PODApi } from "../domain/common/interface/pod.api";
 import { PODClientOptions } from "../domain/common/types/pod.client.options";
 import { AxiosHttpClient } from "../infrastructure/http-client/axios/axios.http-client";
+import { AssetModule } from "./asset/asset.module";
+import { GetAllAssetsService } from "./asset/get-all-assets.service";
 import { AuthModule } from "./auth/auth.module";
 import { LoginService } from "./auth/login.service";
 import { PODClient } from "./pod-client";
@@ -23,6 +25,7 @@ export class PODClientFactory {
       options,
       this.createAuthModule(),
       this.createUserModule(),
+      this.createAssetModule(),
     );
   }
 
@@ -49,7 +52,7 @@ export class PODClientFactory {
   }
 
   /**
-   * Create a AuthModule instance
+   * Create an AuthModule instance
    * @param httpClient
    * @returns {AuthModule}
    */
@@ -59,6 +62,20 @@ export class PODClientFactory {
 
     return {
       login: loginService.login.bind(loginService),
+    };
+  }
+
+  /**
+   * Create an AssetModule instance
+   * @param httpClient
+   * @returns {AssetModule}
+   */
+  private static createAssetModule(): AssetModule {
+    const httpClient = this.createHttpClient();
+    const getAllAssetsService = new GetAllAssetsService(httpClient);
+
+    return {
+      getAll: getAllAssetsService.getAllAssets.bind(getAllAssetsService),
     };
   }
 }

@@ -1,14 +1,14 @@
 {
   "name": "pod_tech_test",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "POD's Technical Test",
   "scripts": {
     "lint": "eslint src/**/** --ext .ts",
     "example": "tsc example/main.ts --outDir dist && node dist/example/main.js",
-    "start": "jest test --watch",
+    "start": "jest test --watch --runInBand",
     "start:docker": "npm install && npm start",
-    "test": "jest test --coverage",
-    "test:unit": "jest test --testRegex=.*\\.test\\.ts$"
+    "test": "jest test --coverage --runInBand",
+    "test:unit": "jest test --testRegex=.*\\.test\\.ts$ --runInBand"
   },
   "repository": {
     "type": "git",

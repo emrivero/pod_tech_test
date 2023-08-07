@@ -12,7 +12,8 @@ describe("LoginService", () => {
   beforeEach(() => {
     mockHttpClient = {
       createUser: jest.fn(),
-      login: jest.fn().mockResolvedValue({ data: "login successful" }),
+      login: jest.fn().mockResolvedValue({ data: "successful" }),
+      paginateAssets: jest.fn(),
     };
 
     loginOptions = {
@@ -40,6 +41,6 @@ describe("LoginService", () => {
 
     const response = await loginService.login(loginOptions);
 
-    expect(response).toEqual({ data: "login successful" });
+    expect(response).toEqual({ data: "successful" });
   });
 });

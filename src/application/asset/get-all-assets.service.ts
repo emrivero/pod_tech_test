@@ -21,24 +21,21 @@ export class GetAllAssetsService {
     accountId: string,
     loginPayload: LoginPayload,
   ): Promise<PaginateResponse<AssetBody>> {
-    let number = 1;
-    let response = await this.getPageAsset(accountId, loginPayload, number);
+    let page = 1;
+    let responses = await this.getNPageAsset(accountId, loginPayload, page);
+    const result = this.extractResponseFromResponses(responses);
+    let keepRequest = !this.thereIsEmptyResponseData(responses);
 
-    const result = {
-      data: response.data,
-      status: response.status,
-      statusText: response.statusText,
-    };
+    while (keepRequest) {
+      page += 1;
+      responses = await this.getNPageAsset(accountId, loginPayload, page);
+      keepRequest = this.thereIsEmptyResponseData(responses);
+      const response = this.extractResponseFromResponses(responses);
 
-    while (response.data.length > 0) {
-      number += 1;
-      response = await this.getPageAsset(accountId, loginPayload, number);
       result.data = result.data.concat(response.data);
       result.status = response.status;
       result.statusText = response.statusText;
 
-      // If the response is not 200, break the loop
-      // and return the error response
       if (response.status !== 200) {
         result.data = [];
         break;
@@ -60,17 +57,77 @@ export class GetAllAssetsService {
    * @param {LoginPayload} loginPayload
    * @returns {Promise<Response<AssetBody[]>>} the user response
    */
-  private getPageAsset(
+  private async getNPageAsset(
     accountId: string,
     loginPayload: LoginPayload,
     page: number,
-  ): Promise<Response<AssetBody[]>> {
+    numberOfRequest = 8,
+  ): Promise<Response<AssetBody[]>[]> {
     const login = new LoginRequest(loginPayload);
+    const paginates = Array.from(
+      { length: numberOfRequest },
+      (_, i) =>
+        new PaginateRequest({
+          limit: 50,
+          page: (page - 1) * numberOfRequest + i + 1,
+          accountId,
+        }),
+    );
 
-    const paginate = new PaginateRequest({ limit: 50, page, accountId });
+    const requests = paginates.map((paginate) =>
+      this.httpClient.paginateAssets(paginate, login),
+    );
 
-    const response = this.httpClient.paginateAssets(paginate, login);
+    const responses = await Promise.allSettled(requests);
 
-    return response;
+    return responses.map((response) => {
+      if (response.status === "fulfilled") {
+        return response.value;
+      }
+
+      return {
+        data: [],
+        status: 500,
+        statusText: "Internal server error",
+      };
+    });
+  }
+
+  /**
+   * Check if there is empty response data
+   * @param {Response<AssetBody[]>[]}  resposes
+   * @returns {boolean} true if there is empty response data
+   */
+  private thereIsEmptyResponseData(resposes: Response<AssetBody[]>[]): boolean {
+    return resposes.some((response) => response.data.length === 0);
+  }
+
+  /**
+   * Extract status from responses
+   * @param responses
+   * @returns
+   */
+  private extractResponseFromResponses(
+    responses: Response<AssetBody[]>[],
+  ): Response<AssetBody[]> {
+    const initial = {
+      data: [],
+      status: 200,
+      statusText: "OK",
+    };
+
+    return responses.reduce((acc, response) => {
+      if (response.status === 200) {
+        return {
+          data: acc.data.concat(
+            responses.map((response) => response.data).flat(),
+          ),
+          status: response.status,
+          statusText: response.statusText,
+        };
+      }
+
+      return acc;
+    }, initial);
   }
 }

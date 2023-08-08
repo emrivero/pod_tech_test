@@ -1,5 +1,4 @@
-import { PODApi } from "../domain/common/interface/pod.api";
-import { PODClientOptions } from "../domain/common/types/pod.client.options";
+import { CreateIntanceFunction } from "../domain/common/interface/create-instance.function";
 import { PODClientFactory } from "./pod.client.factory";
 
 /**
@@ -8,6 +7,6 @@ import { PODClientFactory } from "./pod.client.factory";
  * @param {PODClientOptions} options - The options object
  * @returns {PODClient} - The PODClient instance
  */
-export const createInstance = (options: PODClientOptions): PODApi => {
+export const createInstance: CreateIntanceFunction = (options) => {
   return PODClientFactory.create(options);
 };

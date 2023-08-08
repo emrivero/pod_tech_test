@@ -4,6 +4,7 @@ import { PODClientOptions } from "../domain/common/types/pod.client.options";
 import { AxiosHttpClient } from "../infrastructure/http-client/axios/axios.http-client";
 import { AssetModule } from "./asset/asset.module";
 import { GetAllAssetsService } from "./asset/get-all-assets.service";
+import { GetAssetsCountService } from "./asset/get-count-body.service";
 import { AuthModule } from "./auth/auth.module";
 import { LoginService } from "./auth/login.service";
 import { PODClient } from "./pod-client";
@@ -73,9 +74,13 @@ export class PODClientFactory {
   private static createAssetModule(): AssetModule {
     const httpClient = this.createHttpClient();
     const getAllAssetsService = new GetAllAssetsService(httpClient);
+    const getAssetsCountService = new GetAssetsCountService(httpClient);
 
     return {
       getAll: getAllAssetsService.getAllAssets.bind(getAllAssetsService),
+      getAssetsCount: getAssetsCountService.getAssetsCount.bind(
+        getAssetsCountService,
+      ),
     };
   }
 }

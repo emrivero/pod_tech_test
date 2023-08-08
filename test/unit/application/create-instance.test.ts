@@ -27,6 +27,7 @@ describe("createInstance method", () => {
 
     const mockAssetModule: AssetModule = {
       getAll: jest.fn(),
+      getAssetsCount: jest.fn(),
     };
 
     const mockPODClientInstance = new PODClient(

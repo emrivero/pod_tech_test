@@ -18,4 +18,4 @@ export type CreateUserPayload = {
 /**
  * Status type.
  */
-export type StatusType = "active" | "inactive";
+export type StatusType = "active" | "inactive" | "suspended";

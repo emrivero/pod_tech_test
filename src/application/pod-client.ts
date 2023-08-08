@@ -1,3 +1,4 @@
+import { FilterPayload } from "../domain/asset/types/filter-payload";
 import {
   PODApi,
   PODAssetApi,
@@ -53,6 +54,9 @@ export class PODClient implements PODApi {
     return {
       getAll: (accountId: string) => {
         return this.assetModule.getAll(accountId, this.options);
+      },
+      getAssetsCount: (accountId: string, filter: FilterPayload) => {
+        return this.assetModule.getAssetsCount(accountId, this.options, filter);
       },
     };
   }

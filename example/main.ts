@@ -1,3 +1,4 @@
+import { faker } from "@faker-js/faker";
 import { createInstance } from "../src";
 import { ACCOUNT_ID } from "../test/spec/credentials";
 const username = process.env.POD_USERNAME || "emilio.martinez";
@@ -9,31 +10,35 @@ const instance = createInstance({
   host: "https://hummingbird-staging.podgroup.com",
 });
 
-// instance.auth
-//   .login()
-//   .then((res) => {
-//     console.log(res);
-//   })
-//   .catch((err) => {
-//     console.error(err);
-//   });
+// Auth login method
+instance.auth.login().then((res) => {
+  console.log(res);
+});
 
-// instance.user
-//   .create({
-//     accountId: ACCOUNT_ID,
-//     email: faker.internet.email(),
-//     permissions: [{ accountId: ACCOUNT_ID, roles: ["rol1", "rol2"] }],
-//     username: faker.internet.userName(),
-//     password: faker.internet.password(),
-//     status: "active",
-//   })
-//   .then((res) => {
-//     console.log(res);
-//   });
+// User create method
+instance.user.create({
+  accountId: ACCOUNT_ID,
+  email: faker.internet.email(),
+  permissions: [{ accountId: ACCOUNT_ID, roles: ["rol1", "rol2"] }],
+  username: faker.internet.userName(),
+  password: faker.internet.password(),
+  status: "active",
+});
 
+//getAll assets method
 console.time("getAll");
 instance.asset.getAll(ACCOUNT_ID).then((res) => {
   console.log(res.data);
   console.log(res.statusText);
-  console.timeEnd("getAll");
+  console.timeEnd("getAll"); // ~ 1.5s
 });
+
+// getAssetsCount method
+console.time("getAssetsCount");
+instance.asset
+  .getAssetsCount(ACCOUNT_ID, "active,inactive,suspended")
+  .then((res) => {
+    console.log(res.data);
+    console.log(res.statusText);
+    console.timeEnd("getAssetsCount"); // ~ 1.5s
+  });

@@ -17,14 +17,14 @@
 
 ## How to run the project
 1. Download the repository
-2. Run `docker compose run npm install` to install npm dependencies
-3. Run `docker compose exec app npm run test` to run the tests with coverage
+2. Run `docker compose run app npm install` to install npm dependencies
+3. Run `docker compose run app npm run test` to run the tests with coverage
    
 In addition:   
-1. Run `docker compose exec app npm run lint` to run the linter
-2. Run `docker compose exec app npm run test:unit` to run unit tests only
-3. Run `docker compose exec app npm run example` to run the example/main.ts file
-4. Run `docker compose exec app <command>` to run any other command inside the container`   
+1. Run `docker compose run app npm run lint` to run the linter
+2. Run `docker compose run app npm run test:unit` to run unit tests only
+3. Run `docker compose run app npm run example` to run the example/main.ts file
+4. Run `docker compose run app <command>` to run any other command inside the container`   
 
 > **Note:** This comands not install the dependencies as docker compose up does. If you want to run them, you need to run `docker compose run app npm install` first.
 

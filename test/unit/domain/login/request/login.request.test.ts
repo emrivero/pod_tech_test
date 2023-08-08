@@ -1,11 +1,14 @@
+import { faker } from "@faker-js/faker";
 import { LoginRequest } from "../../../../../src/domain/login/request/login.request";
 import { LoginPayload } from "../../../../../src/domain/login/types/login-payload";
 
 describe("Login Request class", () => {
   const mockPayload: LoginPayload = {
-    username: "testuser",
-    password: "testpassword",
-    host: "https://testurl.com",
+    username: faker.internet.userName(),
+    password: faker.internet.password(),
+    host: faker.internet.url({
+      protocol: "https",
+    }),
   };
 
   test("should return the correct username, password and host using getters", () => {

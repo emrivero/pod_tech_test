@@ -1,10 +1,9 @@
-import { PaginateRequest } from "../../domain/asset/request/paginate.request";
 import { AssetBody } from "../../domain/asset/types/asset-body";
 import { HttpClient } from "../../domain/common/interface/http.client";
 import { PaginateResponse } from "../../domain/common/types/paginate-response";
 import { Response } from "../../domain/common/types/response";
-import { LoginRequest } from "../../domain/login/request/login.request";
 import { LoginPayload } from "../../domain/login/types/login-payload";
+import { getNPageAsset } from "./get-n-page-assets";
 
 /**
  * Get all assets service
@@ -22,13 +21,23 @@ export class GetAllAssetsService {
     loginPayload: LoginPayload,
   ): Promise<PaginateResponse<AssetBody>> {
     let page = 1;
-    let responses = await this.getNPageAsset(accountId, loginPayload, page);
+    let responses = await getNPageAsset(
+      this.httpClient,
+      accountId,
+      loginPayload,
+      page,
+    );
     const result = this.extractResponseFromResponses(responses);
     let keepRequest = !this.thereIsEmptyResponseData(responses);
 
     while (keepRequest) {
       page += 1;
-      responses = await this.getNPageAsset(accountId, loginPayload, page);
+      responses = await getNPageAsset(
+        this.httpClient,
+        accountId,
+        loginPayload,
+        page,
+      );
       keepRequest = this.thereIsEmptyResponseData(responses);
       const response = this.extractResponseFromResponses(responses);
 
@@ -50,47 +59,6 @@ export class GetAllAssetsService {
         payload: result.data,
       },
     };
-  }
-
-  /**
-   * Get page asset
-   * @param {LoginPayload} loginPayload
-   * @returns {Promise<Response<AssetBody[]>>} the user response
-   */
-  private async getNPageAsset(
-    accountId: string,
-    loginPayload: LoginPayload,
-    page: number,
-    numberOfRequest = 8,
-  ): Promise<Response<AssetBody[]>[]> {
-    const login = new LoginRequest(loginPayload);
-    const paginates = Array.from(
-      { length: numberOfRequest },
-      (_, i) =>
-        new PaginateRequest({
-          limit: 50,
-          page: (page - 1) * numberOfRequest + i + 1,
-          accountId,
-        }),
-    );
-
-    const requests = paginates.map((paginate) =>
-      this.httpClient.paginateAssets(paginate, login),
-    );
-
-    const responses = await Promise.allSettled(requests);
-
-    return responses.map((response) => {
-      if (response.status === "fulfilled") {
-        return response.value;
-      }
-
-      return {
-        data: [],
-        status: 500,
-        statusText: "Internal server error",
-      };
-    });
   }
 
   /**

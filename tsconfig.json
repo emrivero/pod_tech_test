@@ -8,7 +8,8 @@
     "strict": true,                                      
     "target": "ES2020",
     "allowImportingTsExtensions": true,    
-    "module": "CommonJS" /* Specify what module code is generated. */,
+    "module": "CommonJS",
+    "sourceMap": true
   },
   "include": ["./**/*",],
   "exclude": ["app/node_modules"]

@@ -8,7 +8,7 @@ describe("CreateUserRequest", () => {
     password: "password123",
     email: "user@example.com",
     status: "active",
-    permissions: [],
+    permissions: [{ accountId: "123456", roles: ["rol1"] }],
   };
 
   test("should create an instance of CreateUserRequest", () => {

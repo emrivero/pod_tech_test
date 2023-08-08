@@ -1,4 +1,6 @@
 import { AssetBody } from "../../asset/types/asset-body";
+import { AssetsCountBody } from "../../asset/types/asset-count-body";
+import { FilterPayload } from "../../asset/types/filter-payload";
 import { LoginBody } from "../../login/types/login-body";
 import { UserBody } from "../../user/types/create-user-body";
 import { CreateUserPayload } from "../../user/types/create-user-payload";
@@ -39,4 +41,8 @@ export interface PODAssetApi {
    *
    */
   getAll(accountId: string): Promise<PaginateResponse<AssetBody>>;
+  getAssetsCount(
+    accountId: string,
+    filter: FilterPayload,
+  ): Promise<Response<AssetsCountBody>>;
 }

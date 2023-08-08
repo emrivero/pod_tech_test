@@ -16,7 +16,7 @@ export type UserBody = {
   email: string;
   lastAccess: string;
   status: string;
-  permissions?: PermissionsBody[] | null;
+  permissions?: PermissionsBody[];
   favorites: Favorites;
   profile: Profile;
 };
@@ -47,16 +47,16 @@ export type PermissionsBody = {
  * @param {string[]} [ztp-settings] - Ztp settings
  */
 export type Favorites = {
-  disims?: string[] | null;
-  summaries?: string[] | null;
-  billing?: string[] | null;
-  users?: string[] | null;
-  products?: string[] | null;
-  accounts?: string[] | null;
-  assets?: string[] | null;
-  imsis?: string[] | null;
-  device?: string[] | null;
-  "ztp-settings"?: string[] | null;
+  disims?: string[];
+  summaries?: string[];
+  billing?: string[];
+  users?: string[];
+  products?: string[];
+  accounts?: string[];
+  assets?: string[];
+  imsis?: string[];
+  device?: string[];
+  "ztp-settings"?: string[];
 };
 
 /**

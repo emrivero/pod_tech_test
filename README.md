@@ -17,19 +17,22 @@
 
 ## How to run the project
 1. Download the repository
-2. Run `docker compose up` to start the tests projects in watch mode
-3. Run docker compose logs -f app to see the logs
+2. Run `docker compose run npm install` to install npm dependencies
+3. Run `docker compose exec app npm run test` to run the tests with coverage
    
 In addition:   
 1. Run `docker compose exec app npm run lint` to run the linter
-2. Run `docker compose exec app npm run test` to run the tests with coverage
-3. Run `docker compose exec app npm run test:unit` to run unit tests only
-4. Run `docker compose exec app npm run example` to run the example/main.ts file
-5. Run `docker compose exec app <command>` to run any other command inside the container`   
+2. Run `docker compose exec app npm run test:unit` to run unit tests only
+3. Run `docker compose exec app npm run example` to run the example/main.ts file
+4. Run `docker compose exec app <command>` to run any other command inside the container`   
 
 > **Note:** This comands not install the dependencies as docker compose up does. If you want to run them, you need to run `docker compose run app npm install` first.
 
 ## Changelog
+### Version 0.5.0
+- Created get assets count method in PODClient class.
+- Created spec test for get assets count method.
+- Added API Documentation to README.md
 ### Version 0.4.1
 - Optimized get all assets method.
 ### Version 0.4.0
@@ -57,3 +60,116 @@ In addition:
 - Set up tsconfig.json configuration to use Node.js in conjunction with Typescript.
 - Installed and configured Jest, initialized the test suite for test specifications, making them fail initially to apply TDD.
 - Installed ESLint and necessary plugins to make it work with Typescript. ESLint and Prettier are used together as default rules.
+
+## Architecture
+<img src="doc/architecture.jpg" />
+
+## API Documentation
+### Creating client instannce
+**createInstance(config: PODClientOptions): PODAPi**
+
+PODClientOptions
+| Property  | Definition  | Type |
+| -------- | ----------  | --------
+| host  | The endpoint host | string
+| password     | The password account | string
+| username    | The username account |  string
+
+
+
+### PODApi Methods
+
+### Auth
+
+**PODApi#auth.login(): Promise<Response<LoginBody\>>**
+
+`Response<LoginBody>`
+| Property  | Definition  | Type
+| -------- | ----------  |------
+| data  | the payload data | LoginBody
+| status     | Status Response | number
+| statusText    | Status Text Response | string
+
+`LoginBody`
+| Property  | Definition  | Type
+| -------- | ----------  |------
+| token  | The user access token | string
+| user     | Info about user | UserBody
+
+### Assets
+
+**PODApi#assets.getAll(accountId: string): Promise<PaginateResponse<AssetBody\>>**
+
+`Response<AssetBody>`
+| Property  | Definition  | Type
+| -------- | ----------  |------
+| data  | the payload data | AssetBody
+| status     | Status Response | number
+| statusText    | Status Text Response | string
+
+`AssetBody`
+>See: src/domain/asset/types/asset-body.ts
+
+**PODApi#assets.getAssetsCount(accountId: string, filter: FilterPayload): Promise<PaginateResponse<AssetsCountBody\>>**
+
+`FilterPayload: "active,inactive,suspended" | "active" | "inactive,suspended" | "inactive" | "suspended" | "active,inactive" | "active,suspended"`
+
+`Response<AssetsCountBody>`
+| Property  | Definition  | Type
+| -------- | ----------  |------
+| data  | the payload data | AssetsCountBody
+| status     | Status Response | number
+| statusText    | Status Text Response | string
+
+`AssetsCountBody`
+| Property  |  Type
+| -------- | ------
+| active  |  number
+| inactive      | number
+| suspended     | number
+
+
+### Users
+**PODApi#users.create(user: CreateUserPayload): Promise<Response<UserBody>>**
+
+`CreateUserPayload`
+| Property  | Definition  | Type
+| -------- | ----------  |------
+|accountId| id of account| string;
+|username| username of new user| string;
+|password| password of new user| string;
+|email| email of new user| string;
+|status| status of new user| StatusType;
+|permissions| permissions of new user | PermissionPayload[];
+
+`StatusType: 'active' | 'inactive'`
+
+`PermissionPayload: {accountId: string, roles: string[]}[]`
+
+`Response<UserBody>`
+| Property  | Definition  | Type
+| -------- | ----------  |------
+| data  | the payload data | UserBody
+| status     | Status Response | number
+| statusText    | Status Text Response | string
+
+`UserBody`
+| Property  | Type
+| --------  |------
+| _id  | string
+| username  |string
+| email     |string
+| lastAccess| string
+| status    | string
+| permissions     | PermissionsBody
+| favorites     | Favorites
+| profile     | Profile
+
+`PermissionsBody`
+> See: src/domain/user/types/create-user-body.ts
+
+`Favorites`
+> See: src/domain/user/types/create-user-body.ts
+
+`Profile`
+> See: src/domain/user/types/create-user-body.ts

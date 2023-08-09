@@ -14,6 +14,7 @@
 - ESlint (8.46.0)
 - Axios (1.4.0)
 - Faker (8.0.2)
+- RxJS (7.8.1)
 
 ## How to run the project
 1. Download the repository
@@ -29,6 +30,11 @@ In addition:
 > **Note:** This comands not install the dependencies as docker compose up does. If you want to run them, you need to run `docker compose run app npm install` first.
 
 ## Changelog
+### Version 0.5.1
+- Refactored the code to use RXJS in get all assets method.
+- Changed get assets count method to use get all assets method.
+- Added jest.retryTimes(3) to avoid Bad Gateway error in spec tests.
+- Improved the coverage of the tests.
 ### Version 0.5.0
 - Created get assets count method in PODClient class.
 - Created spec test for get assets count method.

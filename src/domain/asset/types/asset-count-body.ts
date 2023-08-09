@@ -1,5 +1,5 @@
+import { StatusType } from "../../user/types/create-user-payload";
+
 export type AssetsCountBody = {
-  active?: number;
-  inactive?: number;
-  suspended?: number;
+  [K in StatusType]?: number;
 };

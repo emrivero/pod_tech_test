@@ -1,3 +1,5 @@
+import { StatusType } from "../../user/types/create-user-payload";
+
 /**
  * Asset body
  * @interface
@@ -15,7 +17,7 @@ export type AssetBody = {
     bytes: number;
     roundedBytes: number;
   };
-  status: string;
+  status: StatusType;
   ownership: string[];
   id: string;
   ownerAccountId: string;
